@@ -54,61 +54,15 @@
   }
 
   function buildLogo(svg) {
+    // Use the supplied artwork: its custom Hindi lettering is not a web font.
+    svg.replaceChildren();
+    svg.setAttribute('viewBox', '0 0 1600 609');
     var defs = el('defs', {}, svg);
-    goldDefs(defs, 'lgGold');
-    var wmGold = el('linearGradient', { id: 'lgWmGold', gradientUnits: 'userSpaceOnUse', x1: 0, y1: 1000, x2: 1600, y2: 1180 }, defs);
-    [['0%', '#9a7226'], ['30%', '#d9b269'], ['50%', '#f2d896'], ['70%', '#d9b269'], ['100%', '#9a7226']].forEach(function (s) {
-      el('stop', { offset: s[0], 'stop-color': s[1] }, wmGold);
-    });
-    var selGold = el('linearGradient', { id: 'lgSelGold', gradientUnits: 'userSpaceOnUse', x1: 280, y1: 0, x2: 1320, y2: 0 }, defs);
-    [['0%', '#8a6420'], ['45%', '#e7c87f'], ['60%', '#f0d48c'], ['100%', '#8a6420']].forEach(function (s) {
-      el('stop', { offset: s[0], 'stop-color': s[1] }, selGold);
-    });
-    // clip for the specular sweep across the badge
-    var clip = el('clipPath', { id: 'lgSheenClip' }, defs);
-    var clipRect = el('rect', { x: -420, y: 240, width: 260, height: 480, transform: 'skewX(-18)' }, clip);
-
     var gAll = el('g', { id: 'lgAll' }, svg);
-    var gEmblem = el('g', { id: 'lgEmblem' }, gAll);
-    var ring = el('circle', {
-      id: 'lgRing', cx: EC.x, cy: EC.y, r: D.ring.r,
-      fill: 'none', stroke: 'url(#lgGold)', 'stroke-width': D.ring.w + 1,
-      pathLength: 1000, 'stroke-dasharray': 1000, 'stroke-dashoffset': 0
-    }, gEmblem);
-    var badgeAttrs = {
-      x: EC.x, y: EC.y + 168, 'text-anchor': 'middle',
-      'font-family': D.devFont, 'font-size': 500
-    };
-    var mStrokeAttrs = {};
-    for (var bk in badgeAttrs) mStrokeAttrs[bk] = badgeAttrs[bk];
-    mStrokeAttrs.id = 'lgMStroke';
-    mStrokeAttrs.fill = 'none';
-    mStrokeAttrs.stroke = '#f4d98d';
-    mStrokeAttrs['stroke-width'] = 2.6;
-    mStrokeAttrs.opacity = 0;
-    var mStroke = txt(gEmblem, mStrokeAttrs, D.badge);
-    var fillAttrs = {};
-    for (var fk in badgeAttrs) fillAttrs[fk] = badgeAttrs[fk];
-    fillAttrs.id = 'lgMFill';
-    fillAttrs.fill = 'url(#lgGold)';
-    txt(gEmblem, fillAttrs, D.badge);
-
-    var gMah = el('g', { id: 'lgMah' }, gAll);
-    txt(gMah, {
-      x: 800, y: 1120, 'text-anchor': 'middle',
-      'font-family': D.devFont, 'font-size': 300,
-      fill: 'url(#lgWmGold)', 'class': 'lg-mah'
-    }, D.dev);
-
-    var gSel = el('g', { id: 'lgSel' }, gAll);
-    txt(gSel, {
-      x: 800, y: 1312, 'text-anchor': 'middle',
-      'font-family': D.latinFont, 'font-size': 52, 'font-weight': 500,
-      'letter-spacing': 14, fill: 'url(#lgSelGold)', 'class': 'lg-sel'
-    }, D.latin);
-    D.lines.forEach(function (l, i) {
-      el('rect', { x: l.x, y: l.y, width: l.w, height: Math.max(l.h, 6), fill: 'url(#lgSelGold)', 'class': 'lg-line lg-line-' + i }, gSel);
-    });
+    el('image', {
+      href: 'assets/sawariya-logo-gold.png',
+      x: 0, y: 0, width: 1600, height: 609
+    }, gAll);
 
     /* a single champagne light that passes through the whole identity */
     var bright = el('filter', { id: 'lgBright', x: '-25%', y: '-25%', width: '150%', height: '150%' }, defs);
@@ -119,7 +73,7 @@
     sheen.setAttribute('href', '#lgAll');
     sheen.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#lgAll');
 
-    return { ring: ring, mStroke: mStroke, sheenRect: clipRect, sweepRect: sweepRect, sheen: sheen };
+    return { sweepRect: sweepRect, sheen: sheen };
   }
 
   function buildEmblemOnly(svg, gid) {
@@ -278,8 +232,8 @@
     var vw = window.innerWidth, vh = window.innerHeight;
     var mobile = vw <= 767;
     var targetH = mobile
-      ? Math.min(vh * 0.42, vw * 0.80 * (1351 / 1600))
-      : Math.min(vh * 0.54, vw * 0.44 * (1351 / 1600));
+      ? Math.min(vh * 0.42, vw * 0.80 * (609 / 1600))
+      : Math.min(vh * 0.54, vw * 0.44 * (609 / 1600));
     var scale = targetH / r.height;
     var dx = vw / 2 - (r.left + r.width / 2);
     var dy = vh * 0.5 - (r.top + r.height / 2);
@@ -1059,16 +1013,12 @@
      ============================================================ */
   function buildFooterLogo(svg) {
     if (!svg) return;
-    var defs = el('defs', {}, svg);
-    goldDefs(defs, 'fgGold');
-    var g = el('g', {}, svg);
-    el('circle', { cx: EC.x, cy: EC.y, r: D.ring.r, fill: 'none', stroke: 'url(#fgGold)', 'stroke-width': D.ring.w + 1 }, g);
-    txt(g, { x: EC.x, y: EC.y + 168, 'text-anchor': 'middle', 'font-family': D.devFont, 'font-size': 500, fill: 'url(#fgGold)' }, D.badge);
-    txt(g, { x: 800, y: 1120, 'text-anchor': 'middle', 'font-family': D.devFont, 'font-size': 300, fill: 'url(#fgGold)' }, D.dev);
-    txt(g, { x: 800, y: 1312, 'text-anchor': 'middle', 'font-family': D.latinFont, 'font-size': 52, 'font-weight': 500, 'letter-spacing': 14, fill: 'url(#fgGold)' }, D.latin);
-    D.lines.forEach(function (l) {
-      el('rect', { x: l.x, y: l.y, width: l.w, height: Math.max(l.h, 6), fill: 'url(#fgGold)' }, g);
-    });
+    svg.replaceChildren();
+    svg.setAttribute('viewBox', '0 0 1600 609');
+    el('image', {
+      href: 'assets/sawariya-logo-gold.png',
+      x: 0, y: 0, width: 1600, height: 609
+    }, svg);
   }
   buildFooterLogo($('#footLogo'));
 
