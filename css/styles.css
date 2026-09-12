@@ -2391,3 +2391,18 @@ body { font-weight: 400; }
   .v-grid, .v-info, .v-reviews { grid-template-columns: 1fr; }
   .v-wide { grid-column: auto; }
 }
+
+/* Supplied horizontal Sawariya artwork; preserve its original proportions. */
+#header { --logo-h: 72px; --logo-h-solid: 56px; --logo-half: calc(var(--logo-h) * 1.314); }
+#header.is-solid { --logo-half: calc(var(--logo-h-solid) * 1.314); }
+#brandLogo { aspect-ratio: 1600 / 609; }
+#footLogo { height: auto; width: min(100%, 320px); aspect-ratio: 1600 / 609; }
+@media (max-width: 1199px) {
+  #header { --logo-h: 64px; --logo-h-solid: 52px; }
+}
+@media (max-width: 767px) {
+  #header { --logo-h: 56px; --logo-h-solid: 46px; }
+}
+@media (max-width: 374px) {
+  #header { --logo-h: 46px; --logo-h-solid: 42px; }
+}
